@@ -13,27 +13,34 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
+import com.ugr.gbv.farmacia.data.MedicationContract;
+import com.ugr.gbv.farmacia.data.MedicationDbHelper;
+import com.ugr.gbv.farmacia.fast_scroller.FastScroller;
+import com.ugr.gbv.farmacia.fast_scroller.ScrollingLinearLayoutManager;
+import com.ugr.gbv.farmacia.utilities.DataBaseUtils;
+
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
-        ArticlesAdapter.ArticlesAdapterOnClickHandler,
+        MedicationAdapter.MedicationAdapterOnClickHandler,
         SearchView.OnQueryTextListener{
 
 
     public static final String[] MAIN_ARTICLE_PROJECTION = {
-            MedicationContract.ArticleEntry.COLUMN_ARTICLE_NAME,
-            MedicationContract.ArticleEntry.COLUMN_ARTICLE_TEXT,
-            MedicationContract.ArticleEntry._ID
+            MedicationContract.MedicationEntry.COLUMN_MED_NAME,
+            MedicationContract.MedicationEntry.COLUMN_MED_TEXT,
+            MedicationContract.MedicationEntry._ID
     };
 
 
 
-    private ArticlesAdapter articlesAdapter;
+    private MedicationAdapter medicationsAdapter;
     private RecyclerView recyclerView;
     private SQLiteDatabase mDb;
     private int mPosition = RecyclerView.NO_POSITION;
@@ -49,7 +56,7 @@ public class MainActivity extends AppCompatActivity
     private ProgressBar mLoadingIndicator;
 
 
-    private static final int ID_ARTICLES_LOADER = 95;
+    private static final int ID_MED_LOADER = 95;
 
 
     @Override
@@ -71,7 +78,7 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setLayoutManager(layoutManager);
 
         // Generar un asistente de la base de datos
-        ArticleDbHelper dbHelper = new ArticleDbHelper(this);
+        MedicationDbHelper dbHelper = new MedicationDbHelper(this);
 
         //Asignar una base de datos legible
         mDb = dbHelper.getReadableDatabase();
@@ -83,10 +90,10 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setHasFixedSize(true);
 
         //Se pasa al adaptador de la vista la informacion que procesa para ser visualizada
-        articlesAdapter = new ArticlesAdapter(this, cursor, this);
+        medicationsAdapter = new MedicationAdapter(this, cursor, this);
 
         //Se vincula el adaptador al recyclerView para que se visualice
-        recyclerView.setAdapter(articlesAdapter);
+        recyclerView.setAdapter(medicationsAdapter);
 
         int duration = getResources().getInteger(R.integer.scroll_duration);
         recyclerView.setLayoutManager(new ScrollingLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false, duration));
@@ -101,7 +108,7 @@ public class MainActivity extends AppCompatActivity
 
         showLoading();
 
-        getSupportLoaderManager().initLoader(ID_ARTICLES_LOADER, null, this);
+        getSupportLoaderManager().initLoader(ID_MED_LOADER, null, this);
 
 
     }
@@ -113,9 +120,9 @@ public class MainActivity extends AppCompatActivity
         switch(loaderId){
 
 
-            case ID_ARTICLES_LOADER:
-                Uri articlesQueryUri = ArticleContract.ArticleEntry.CONTENT_URI;
-                String sortOrder = ArticleContract.ArticleEntry._ID;
+            case ID_MED_LOADER:
+                Uri articlesQueryUri = MedicationContract.MedicationEntry.CONTENT_URI;
+                String sortOrder = MedicationContract.MedicationEntry._ID;
 
                 return new CursorLoader(this,
                         articlesQueryUri,
@@ -145,16 +152,13 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-        articlesAdapter.swapCursor(data);
-        //TODO METER
+        medicationsAdapter.swapCursor(data);
         if(mPosition <= RecyclerView.NO_POSITION){
             mPosition = 0;
         }
-        else if(mPosition >= data.getCount()){
-            data.moveToLast();
-            mPosition = data.getPosition();
-        }
+
         recyclerView.scrollToPosition(mPosition);
+        
         if(data.getCount() > 0){
             showData();
         }
@@ -166,14 +170,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        articlesAdapter.swapCursor(null);
+        medicationsAdapter.swapCursor(null);
     }
     /*  Cuando se presiona sobre un articulo se muestra con una nueva actividad mostrando el texto
      * */
     @Override
     public void onClick(String text, int first_pos, int last_pos, int la_pos) {
         Intent intent = new Intent(this, DetailArticle.class);
-        Uri uriForTextClicked = ArticleContract.ArticleEntry.buildUriWithText(text);
+        Uri uriForTextClicked = MedicationContract.MedicationEntry.buildUriWithText(text);
 
         intent.setData(uriForTextClicked);
         intent.putExtra("la_palabra", searchedText);
@@ -193,7 +197,7 @@ public class MainActivity extends AppCompatActivity
     public void goToArticle(int id){
         Cursor cursor;
         cursor = DataBaseUtils.getAllArticles(mDb);
-        articlesAdapter.setFilter(cursor);
+        medicationsAdapter.setFilter(cursor);
         id+=3;
         if(id > cursor.getCount()){
             cursor.moveToLast();
@@ -283,7 +287,7 @@ public class MainActivity extends AppCompatActivity
             cursor = DataBaseUtils.getAllArticles(mDb);
         }
 
-        articlesAdapter.setFilter(cursor);
+        medicationsAdapter.setFilter(cursor);
 
         return true;
     }

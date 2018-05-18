@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">farmacia</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Correo Electrónico</string>
+    <string name="prompt_password">Contraseña (optional)</string>
+    <string name="action_sign_in">Conectarse</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">Este correo electrónico no es válido</string>
+    <string name="error_invalid_password">La contraseña es muy pequeña</string>
+    <string name="error_incorrect_password">La contraseña es incorrecta</string>
+    <string name="error_field_required">Campo requerido</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_maps">Map</string>
 </resources>
