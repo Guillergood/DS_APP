@@ -1,12 +1,13 @@
 <resources>
-    <string name="app_name">farmacia</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="app_name">Farmacia</string>
+    <string name="content_authority">com.ugr.gbv.farmacia</string>
+    <string name="title_activity_login">Conectarse</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Correo Electrónico</string>
     <string name="prompt_password">Contraseña (optional)</string>
     <string name="action_sign_in">Conectarse</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_in_short">Conectarse</string>
     <string name="error_invalid_email">Este correo electrónico no es válido</string>
     <string name="error_invalid_password">La contraseña es muy pequeña</string>
     <string name="error_incorrect_password">La contraseña es incorrecta</string>
@@ -14,5 +15,17 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="fils_selected">filas</string>
+    <string name="one_fil_selected">fila</string>
+    <string name="next_button">SIGUIENTE</string>
+    <string name="skip_button">SALTAR</string>
+    <string name="proceed_button">ACCEDER</string>
+    <string name="fastscroller_track">tracking_fast_scroll</string>
+    <string name="access_granted">concedido</string>
+    <string name="permit_access">CONCEDER</string>
+    <string name="message_permission">Por favor, acepte los permisos necesarios</string>
+    <string name="app_title">Farmacia</string>
+    <string name="hastag_code">#FarmaciaUGRApp</string>
+    <string name="pref_first_time_key">pref_first_time_key</string>
 </resources>

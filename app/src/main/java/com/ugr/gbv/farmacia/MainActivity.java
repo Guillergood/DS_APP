@@ -26,16 +26,18 @@ import com.ugr.gbv.farmacia.fast_scroller.FastScroller;
 import com.ugr.gbv.farmacia.fast_scroller.ScrollingLinearLayoutManager;
 import com.ugr.gbv.farmacia.utilities.DataBaseUtils;
 
+
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
         MedicationAdapter.MedicationAdapterOnClickHandler,
         SearchView.OnQueryTextListener{
 
 
-    public static final String[] MAIN_ARTICLE_PROJECTION = {
-            MedicationContract.MedicationEntry.COLUMN_MED_NAME,
-            MedicationContract.MedicationEntry.COLUMN_MED_TEXT,
-            MedicationContract.MedicationEntry._ID
+    public static final String[] MAIN_MED_PROJECTION = {
+                    MedicationContract.MedicationEntry._ID,
+                    MedicationContract.MedicationEntry.COLUMN_MED_NAME,
+                    MedicationContract.MedicationEntry.COLUMN_MED_PRICE,
+                    MedicationContract.MedicationEntry.COLUMN_MED_TEXT
     };
 
 
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_articles_menu);
+        setContentView(R.layout.activity_main);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null)
             actionBar.setElevation(0f);
@@ -108,7 +110,8 @@ public class MainActivity extends AppCompatActivity
 
         showLoading();
 
-        getSupportLoaderManager().initLoader(ID_MED_LOADER, null, this);
+        getLoaderManager().initLoader(ID_MED_LOADER,null,this);
+        //getSupportLoaderManager().initLoader(ID_MED_LOADER, null, this);
 
 
     }
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity
 
                 return new CursorLoader(this,
                         articlesQueryUri,
-                        MAIN_ARTICLE_PROJECTION,
+                        MAIN_MED_PROJECTION,
                         null,
                         null,
                         sortOrder);
@@ -142,28 +145,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        if(searchedText != null && !searchedText.isEmpty()) {
-            if (isNumberSearch){
-                data = DataBaseUtils.getAllArticleNumbersMatch(searchedText, mDb);
-            }
-            else {
-                data = DataBaseUtils.getAllArticlesMatch(searchedText, mDb);
-            }
-        }
-
-
         medicationsAdapter.swapCursor(data);
         if(mPosition <= RecyclerView.NO_POSITION){
             mPosition = 0;
         }
 
         recyclerView.scrollToPosition(mPosition);
-        
+
         if(data.getCount() > 0){
             showData();
         }
-
-
 
     }
 
@@ -175,38 +166,17 @@ public class MainActivity extends AppCompatActivity
     /*  Cuando se presiona sobre un articulo se muestra con una nueva actividad mostrando el texto
      * */
     @Override
-    public void onClick(String text, int first_pos, int last_pos, int la_pos) {
-        Intent intent = new Intent(this, DetailArticle.class);
+    public void onClick(String text) {
+        Intent intent = new Intent(this, DetailMed.class);
         Uri uriForTextClicked = MedicationContract.MedicationEntry.buildUriWithText(text);
 
         intent.setData(uriForTextClicked);
         intent.putExtra("la_palabra", searchedText);
         intent.putExtra("is_searching", isSearching);
         intent.putExtra("is_number_searching", isNumberSearch);
-        intent.putExtra("la_pos", la_pos);
-        intent.putExtra("first_pos",first_pos);
-        intent.putExtra("last_pos",last_pos);
         startActivity(intent);
 
     }
-
-
-
-
-    @Override
-    public void goToArticle(int id){
-        Cursor cursor;
-        cursor = DataBaseUtils.getAllArticles(mDb);
-        medicationsAdapter.setFilter(cursor);
-        id+=3;
-        if(id > cursor.getCount()){
-            cursor.moveToLast();
-            id = cursor.getPosition();
-        }
-        recyclerView.scrollToPosition(id);
-    }
-
-
 
 
 

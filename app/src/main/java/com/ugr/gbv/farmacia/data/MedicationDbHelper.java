@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class MedicationDbHelper  extends SQLiteOpenHelper{
+public class MedicationDbHelper extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "medication_gbv_DS.db";
     private static final int DATABASE_VERSION = 1;
     public MedicationDbHelper(Context context) {
@@ -18,6 +18,7 @@ public class MedicationDbHelper  extends SQLiteOpenHelper{
                 MedicationContract.MedicationEntry.TABLE_NAME + " (" +
                 MedicationContract.MedicationEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 MedicationContract.MedicationEntry.COLUMN_MED_NAME + " TEXT NOT NULL, " +
+                MedicationContract.MedicationEntry.COLUMN_MED_PRICE + " TEXT NOT NULL, " +
                 MedicationContract.MedicationEntry.COLUMN_MED_TEXT + " TEXT NOT NULL " +
                 ");";
 

@@ -25,8 +25,6 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
     private Context mContext;
 
     private Cursor mCursor;
-    private int first;
-    private int last;
 
     public MedicationAdapter(Context pContext, Cursor pCursor, MedicationAdapterOnClickHandler pHandler) {
         mContext = pContext;
@@ -38,9 +36,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
 
 
     interface MedicationAdapterOnClickHandler{
-        void onClick(String text, int first_pos, int last_pos, int la_pos);
-        void goToArticle(int position);
-        void readArticles(ArrayList<Integer> realIds);
+        void onClick(String text);
     }
 
 
@@ -105,7 +101,6 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
 
     void swapCursor(Cursor newCursor){
         mCursor = newCursor;
-        refreshFirstAndLast();
         notifyDataSetChanged();
     }
 
@@ -114,18 +109,6 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
         swapCursor(pCursor);
     }
 
-
-
-    void refreshFirstAndLast() {
-        if(mCursor != null && mCursor.getCount() != 0) {
-            mCursor.moveToLast();
-            last = mCursor.getInt(
-                    mCursor.getColumnIndex(MedicationContract.MedicationEntry._ID));
-            mCursor.moveToFirst();
-            first = mCursor.getInt(
-                    mCursor.getColumnIndex(MedicationContract.MedicationEntry._ID));
-        }
-    }
 
 
     private ActionMode.Callback actionModeCallbacks = new ActionMode.Callback(){
@@ -140,7 +123,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
             actionMode = mode;
             actionMode.setTitle(selectedItems.size() + " " +
                     mContext.getString(R.string.fils_selected));
-            goto_item = menu.findItem(R.id.action_goto);
+            buy_item = menu.findItem(R.id.action_buy);
             return true;
         }
 
@@ -153,9 +136,8 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             int id = item.getItemId();
             switch (id){
-                case R.id.action_goto:
+                case R.id.action_buy:
                     int code = realIds.get(0);
-                    mClickHandler.goToArticle(code);
                     if(code > 0) code -=1;
                     selectedItems.set(0,code);
                     notifyItemChanged(code);
@@ -181,7 +163,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
             multiSelect = false;
             selectedItems.clear();
             realIds.clear();
-            goto_item = null;
+            buy_item = null;
             notifyDataSetChanged();
         }
     };
@@ -189,7 +171,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
     private boolean multiSelect = false;
     private ArrayList<Integer> selectedItems;
     private ArrayList<Integer> realIds;
-    private MenuItem goto_item;
+    private MenuItem buy_item;
     private ActionMode actionMode;
 
 
@@ -247,10 +229,10 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
                 }
 
                 if(rows_selected > 1) {
-                    goto_item.setVisible(false);
+                    buy_item.setVisible(false);
                 }
                 else{
-                    goto_item.setVisible(true);
+                    buy_item.setVisible(true);
                 }
             }
         }
@@ -268,12 +250,11 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
                     selectItem(adapterPosition, number);
                     notifyItemChanged(adapterPosition);
                 } else {
-                    refreshFirstAndLast();
                     mCursor.moveToPosition(adapterPosition);
 
                     String text = mCursor.getString
                             (mCursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_MED_TEXT));
-                    mClickHandler.onClick(text, first, last, adapterPosition);
+                    mClickHandler.onClick(text);
                 }
             }
 

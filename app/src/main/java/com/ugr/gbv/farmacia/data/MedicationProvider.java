@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.ugr.gbv.farmacia.utilities.DataBaseUtils;
+
 public class MedicationProvider extends ContentProvider {
 
 
@@ -49,8 +51,7 @@ public class MedicationProvider extends ContentProvider {
                     int rowsInserted = 0;
                     try {
                         for (ContentValues value : values){
-                            String name =
-                                    value.getAsString(MedicationContract.MedicationEntry.COLUMN_MED_NAME);
+                            String name = value.getAsString(MedicationContract.MedicationEntry.COLUMN_MED_NAME);
 
                             if (name.isEmpty()){
                                 throw new IllegalArgumentException("Nombre Vacío");
@@ -133,6 +134,13 @@ public class MedicationProvider extends ContentProvider {
                 default:
                     throw new UnsupportedOperationException("Uri desconocido: " + uri);
             }
+
+            if (cursor.getCount() == 0){
+                SQLiteDatabase mDb = mOpenHelper.getReadableDatabase();
+                cursor = DataBaseUtils.getAllArticles(mDb);
+            }
+
+
 
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
 

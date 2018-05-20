@@ -17,9 +17,10 @@ public class MedicationContract {
                 .appendPath(PATH_ARTICLE)
                 .build();
 
-        public static final String TABLE_NAME = "articmedications";
+        public static final String TABLE_NAME = "medications";
         public static final String COLUMN_MED_NAME = "medicationName";
         public static final String COLUMN_MED_TEXT = "medicationText";
+        public static final String COLUMN_MED_PRICE = "medicationPrice";
 
 
         public static Uri buildUriWithText(String text) {

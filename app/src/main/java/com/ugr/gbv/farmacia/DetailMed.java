@@ -3,12 +3,11 @@ package com.ugr.gbv.farmacia;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.ShareCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
@@ -17,15 +16,11 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
+
 
 import com.ugr.gbv.farmacia.data.MedicationContract;
-import com.ugr.gbv.farmacia.data.MedicationDbHelper;
+import com.ugr.gbv.farmacia.databinding.ActivityDetailMedBinding;
+
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,31 +31,19 @@ public class DetailMed extends AppCompatActivity implements
 
     public static final int INDEX_MED_NAME = 0;
     public static final int INDEX_MED_TEXT = 1;
-    public static final int INDEX_MED_ID = 2;
 
-    private int firstElem;
-    private int mPos = 0;
-    private int mIndexPos;
-    private int endElem;
-    private Cursor mCursor;
 
-    private SQLiteDatabase mDb;
-
-    private Button prev_button;
-    private Button next_button;
 
     private String searchedWord;
-
-    private boolean searchingElement = false;
-    private boolean searchingNumberElement = false;
-    private boolean isSavedStateOn = false;
+    private boolean searchingElement;
+    private ActivityDetailMedBinding mDetailBinding;
 
     private static final int ID_DETAIL_LOADER = 995;
 
     /* El URI para acceder al articulo en escogido */
     private Uri mUri;
 
-    private ActivityDetailArticleBinding mDetailBinding;
+    //private ActivityDetailArticleBinding mDetailBinding;
 
 
     public static final String[] DETAIL_MED_PROJECTION = {
@@ -73,7 +56,7 @@ public class DetailMed extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail_article);
+        mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail_med);
         // Añadido para que al darle atras vuelva al menu
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
@@ -87,46 +70,10 @@ public class DetailMed extends AppCompatActivity implements
                 searchedWord = "";
             if (getIntent().hasExtra("is_searching"))
                 searchingElement = getIntent().getExtras().getBoolean("is_searching");
-            if (getIntent().hasExtra("is_number_searching"))
-                searchingNumberElement = getIntent().getExtras().getBoolean("is_number_searching");
-            if (getIntent().hasExtra("first_pos"))
-                firstElem = getIntent().getExtras().getInt("first_pos");
-            if (getIntent().hasExtra("last_pos"))
-                endElem = getIntent().getExtras().getInt("last_pos");
-            if (getIntent().hasExtra("la_pos") && savedInstanceState == null)
-                mIndexPos = getIntent().getExtras().getInt("la_pos");
-            else {
-                mIndexPos = savedInstanceState.getInt("the_index_pos");
-                isSavedStateOn = true;
-            }
         }
-
-        prev_button = findViewById(R.id.button_ant);
-        next_button = findViewById(R.id.button_sig);
-
-        prev_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCursor != null)
-                    moveToPrev();
-            }
-        });
-
-        next_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCursor != null)
-                    moveToNext();
-            }
-        });
 
         if (mUri == null) throw new NullPointerException(
                 "URI para la actividad DetailArticle no puede ser nulo ");
-
-
-        MedicationDbHelper dbHelper = new  MedicationDbHelper(this);
-        //Asignar una base de datos legible
-        mDb = dbHelper.getReadableDatabase();
 
 
 
@@ -135,73 +82,7 @@ public class DetailMed extends AppCompatActivity implements
 
     }
 
-    private void moveToNext() {
-        mCursor.moveToNext();
-        if (!mCursor.isAfterLast() && mPos <= endElem) {
-            mPos = mCursor.getInt(mCursor.getColumnIndex(MedicationContract.MedicationEntry._ID));
-            refreshData();
-            mIndexPos++;
-        } else {
-            mCursor.moveToLast();
-            mPos = mCursor.getInt(mCursor.getColumnIndex(MedicationContract.MedicationEntry._ID));
-            mIndexPos = mCursor.getColumnCount() - 1;
-        }
 
-    }
-
-    private void moveToPrev() {
-        mCursor.moveToPrevious();
-        if (!mCursor.isBeforeFirst() && mPos >= firstElem) {
-            mPos = mCursor.getInt(mCursor.getColumnIndex(MedicationContract.MedicationEntry._ID));
-            mIndexPos--;
-            refreshData();
-        } else {
-            mCursor.moveToFirst();
-            mPos = mCursor.getInt(mCursor.getColumnIndex(MedicationContract.MedicationEntry._ID));
-            mIndexPos = 0;
-        }
-
-
-    }
-
-
-    private void refreshData() {
-        String nombre = mCursor.getString(mCursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_MED_NAME));
-        String datos = mCursor.getString(mCursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_MED_TEXT));
-
-        if (TextUtils.equals(datos, nombre)) {
-            nombre = " ";
-        }
-
-        checkIfFirst();
-        checkIfLast();
-
-
-        mDetailBinding.nombreArt.setText(nombre);
-        if (searchingElement && datos != null) {
-            highlightText(datos);
-        } else {
-            mDetailBinding.texto.setText(datos);
-        }
-    }
-
-    private void checkIfLast() {
-        if (mPos == endElem) {
-            next_button.setVisibility(View.INVISIBLE);
-        } else if (mPos < endElem && next_button.getVisibility() == View.INVISIBLE) {
-            next_button.setVisibility(View.VISIBLE);
-        }
-
-    }
-
-    private void checkIfFirst() {
-        if (mPos == firstElem) {
-            prev_button.setVisibility(View.INVISIBLE);
-        } else if (mPos > firstElem && prev_button.getVisibility() == View.INVISIBLE) {
-            prev_button.setVisibility(View.VISIBLE);
-        }
-
-    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArgs) {
@@ -239,36 +120,22 @@ public class DetailMed extends AppCompatActivity implements
 
         String nombre = null;
         String datos = null;
-        mCursor.moveToPosition(mIndexPos);
-
-        if (!isSavedStateOn) {
-            nombre = data.getString(INDEX_MED_NAME);
-            datos = data.getString(INDEX_MED_TEXT);
-            mPos = data.getInt(INDEX_MED_ID);
-        } else {
-            nombre = mCursor.getString(INDEX_MED_TEXT);
-            datos = mCursor.getString(INDEX_MED_ID);
-            mPos = mCursor.getInt(INDEX_MED_NAME);
-            isSavedStateOn = false;
-        }
-
-        if (TextUtils.equals(datos, nombre)) {
-            nombre = " ";
-        }
 
 
-        checkIfFirst();
-        checkIfLast();
 
-        mDetailBinding.nombreArt.setText(nombre);
+        nombre = data.getString(INDEX_MED_NAME);
+        datos = data.getString(INDEX_MED_TEXT);
+
+
+
+
+        mDetailBinding.nombreMed.setText(nombre);
         if (datos != null) {
             if (searchingElement) {
                 highlightText(datos);
             } else {
                 mDetailBinding.texto.setText(datos);
             }
-        } else {
-            mDetailBinding.texto.setText(" ");
         }
 
 
@@ -280,55 +147,6 @@ public class DetailMed extends AppCompatActivity implements
         loader.forceLoad();
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        /* Use the inflater's inflate method to inflate our menu layout to this menu */
-        inflater.inflate(R.menu.detail, menu);
-        /* Return true so that the menu is displayed in the Toolbar */
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-
-            /* Share menu item clicked */
-            case R.id.action_share:
-                Intent shareIntent = createShareArticleIntent();
-                startActivity(shareIntent);
-                return true;
-
-            //Cuando se pulsa el botón atrás del IU no se muestran palabras
-            case android.R.id.home:
-                //TODO MODIFICAR
-                onBackPressed();
-                return true;
-
-        }
-
-        return super.onOptionsItemSelected(item);
-
-    }
-
-    private Intent createShareArticleIntent() {
-        String comparte = mDetailBinding.nombreArt.getText() + "\n\n" + mDetailBinding.texto.getText();
-        Intent shareIntent = ShareCompat.IntentBuilder.from(this)
-                .setType("text/plain")
-                .setText(comparte + " " + getString(R.string.hastag_code))
-                .getIntent();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        } else {
-            shareIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-
-        return shareIntent;
-    }
 
     public void highlightText(String data) {
 
