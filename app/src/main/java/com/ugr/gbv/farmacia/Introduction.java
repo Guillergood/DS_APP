@@ -16,6 +16,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.ugr.gbv.farmacia.data.MedicationPreferences;
+
 public class Introduction extends Activity {
 
     private ViewPager viewPager;
@@ -27,10 +29,15 @@ public class Introduction extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_introduction);
 
+        if(!MedicationPreferences.getFirstTimeLaunch(getBaseContext()))
+            goToMainMenu();
+
+
+
         ViewPagerAdapter viewPagerAdapter;
 
-        layouts = new int[]{R.layout.pantalla_1,R.layout.pantalla_1,
-                R.layout.pantalla_1
+        layouts = new int[]{R.layout.pantalla_1,R.layout.pantalla_2,
+                R.layout.pantalla_3
         };
 
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.LOLLIPOP){

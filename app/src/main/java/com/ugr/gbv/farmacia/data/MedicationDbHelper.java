@@ -18,7 +18,7 @@ public class MedicationDbHelper extends SQLiteOpenHelper{
                 MedicationContract.MedicationEntry.TABLE_NAME + " (" +
                 MedicationContract.MedicationEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 MedicationContract.MedicationEntry.COLUMN_MED_NAME + " TEXT NOT NULL, " +
-                MedicationContract.MedicationEntry.COLUMN_MED_PRICE + " TEXT NOT NULL, " +
+                MedicationContract.MedicationEntry.COLUMN_MED_PRICE + " REAL NOT NULL, " +
                 MedicationContract.MedicationEntry.COLUMN_MED_TEXT + " TEXT NOT NULL " +
                 ");";
 

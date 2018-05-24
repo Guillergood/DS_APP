@@ -173,7 +173,6 @@ public class MainActivity extends AppCompatActivity
         intent.setData(uriForTextClicked);
         intent.putExtra("la_palabra", searchedText);
         intent.putExtra("is_searching", isSearching);
-        intent.putExtra("is_number_searching", isNumberSearch);
         startActivity(intent);
 
     }

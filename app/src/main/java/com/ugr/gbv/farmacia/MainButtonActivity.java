@@ -26,7 +26,6 @@ import com.ugr.gbv.farmacia.sync.MedicationsSyncTask;
 public class MainButtonActivity extends RuntimePermission {
 
     private static final int REQUEST_PERMISSION = 151;
-    private SQLiteDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,14 +108,12 @@ public class MainButtonActivity extends RuntimePermission {
 
                 @Override
                 protected void onPostExecute(Void aVoid) {
-                    Toast.makeText(context, "TERMINADO", Toast.LENGTH_LONG).show();
-                    MedicationPreferences.saveFirstTimeLaunch(context,false);
                 }
             };
             mFetchMedsTask.execute();
         }
 
 
-
+        MedicationPreferences.saveFirstTimeLaunch(context,false);
     }
 }

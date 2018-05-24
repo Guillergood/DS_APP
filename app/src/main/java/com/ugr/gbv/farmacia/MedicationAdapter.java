@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ugr.gbv.farmacia.data.MedicationContract;
 
@@ -39,6 +40,10 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
         void onClick(String text);
     }
 
+
+    public static final int INDEX_MED_ID = 0;
+    public static final int INDEX_MED_NAME = 1;
+    public static final int INDEX_MED_PRICE = 2;
 
 
 
@@ -137,10 +142,16 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
             int id = item.getItemId();
             switch (id){
                 case R.id.action_buy:
-                    int code = realIds.get(0);
-                    if(code > 0) code -=1;
-                    selectedItems.set(0,code);
-                    notifyItemChanged(code);
+                    int actual = mCursor.getPosition();
+                    double precio = 0.0;
+                    for(int x:selectedItems){
+                        mCursor.moveToPosition(x);
+                        String nombre = mCursor.getString(INDEX_MED_NAME);
+                        precio += mCursor.getInt(INDEX_MED_PRICE);
+                    }
+                    mCursor.moveToPosition(actual);
+                    Toast.makeText(mContext, "COMPRA REALIZADA PRECIO = " + precio + " EUROS" ,Toast.LENGTH_LONG).show();
+
                     break;
                 case R.id.action_clear:
                     selectedItems.clear();
@@ -228,12 +239,6 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
                             rows_selected + " " +  mContext.getString(R.string.fils_selected));
                 }
 
-                if(rows_selected > 1) {
-                    buy_item.setVisible(false);
-                }
-                else{
-                    buy_item.setVisible(true);
-                }
             }
         }
 
