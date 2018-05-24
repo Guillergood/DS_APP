@@ -14,9 +14,9 @@ import com.ugr.gbv.farmacia.utilities.DataBaseUtils;
 public class MedicationProvider extends ContentProvider {
 
 
-        public static final int CODE_ARTICLE = 100;
-        public static final int CODE_ARTICLE_WITH_TEXT = 101;
-        public static final int CODE_ARTICLE_WITH_NUMBER = 102;
+        public static final int CODE_MEDS = 100;
+        public static final int CODE_MEDS_WITH_TEXT = 101;
+        public static final int CODE_MEDS_WITH_NUMBER = 102;
 
         private static final UriMatcher sUriMatcher = buildUriMatcher();
         private MedicationDbHelper mOpenHelper;
@@ -25,9 +25,9 @@ public class MedicationProvider extends ContentProvider {
             final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
             final String authority = MedicationContract.CONTENT_AUTHORITY;
 
-            matcher.addURI(authority, MedicationContract.PATH_ARTICLE, CODE_ARTICLE);
+            matcher.addURI(authority, MedicationContract.PATH_ARTICLE, CODE_MEDS);
 
-            matcher.addURI(authority,MedicationContract.PATH_ARTICLE + "/*", CODE_ARTICLE_WITH_TEXT);
+            matcher.addURI(authority,MedicationContract.PATH_ARTICLE + "/*", CODE_MEDS_WITH_TEXT);
 
 
             return matcher;
@@ -46,7 +46,7 @@ public class MedicationProvider extends ContentProvider {
             final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
             switch (sUriMatcher.match(uri)){
-                case CODE_ARTICLE:
+                case CODE_MEDS:
                     db.beginTransaction();
                     int rowsInserted = 0;
                     try {
@@ -86,7 +86,7 @@ public class MedicationProvider extends ContentProvider {
             Cursor cursor;
 
             switch (sUriMatcher.match(uri)){
-                case CODE_ARTICLE_WITH_TEXT:
+                case CODE_MEDS_WITH_TEXT:
                     String textArticle = uri.getLastPathSegment();
 
                     String[] selectionArguments = new String[]{textArticle};
@@ -101,24 +101,9 @@ public class MedicationProvider extends ContentProvider {
                             sortOrder);
 
                     break;
+                    
 
-                case CODE_ARTICLE_WITH_NUMBER:
-                    String numberArticle = uri.getLastPathSegment();
-
-                    String[] selecArgs = new String[]{numberArticle};
-
-                    cursor = mOpenHelper.getReadableDatabase().query(
-                            MedicationContract.MedicationEntry.TABLE_NAME,
-                            projection,
-                            MedicationContract.MedicationEntry._ID + " = ? ",
-                            selecArgs,
-                            null,
-                            null,
-                            sortOrder);
-
-                    break;
-
-                case CODE_ARTICLE:
+                case CODE_MEDS:
                     cursor = mOpenHelper.getReadableDatabase().query(
                             MedicationContract.MedicationEntry.TABLE_NAME,
                             projection,
@@ -133,11 +118,6 @@ public class MedicationProvider extends ContentProvider {
 
                 default:
                     throw new UnsupportedOperationException("Uri desconocido: " + uri);
-            }
-
-            if (cursor.getCount() == 0){
-                SQLiteDatabase mDb = mOpenHelper.getReadableDatabase();
-                cursor = DataBaseUtils.getAllArticles(mDb);
             }
 
 
@@ -166,7 +146,7 @@ public class MedicationProvider extends ContentProvider {
             if (null == selection) selection = "1";
 
             switch (sUriMatcher.match(uri)){
-                case CODE_ARTICLE:
+                case CODE_MEDS:
                     numberRowsDeleted = mOpenHelper.getWritableDatabase().delete(
                             MedicationContract.MedicationEntry.TABLE_NAME,
                             selection,

@@ -24,6 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="ffffff" />
+                                                <entry key="paddingPercent" value="-5" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -34,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/D:/Archivos%20de%20programa/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_search_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/D:/Archivos%20de%20programa/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_add_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -44,10 +45,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundColor" value="ff9459" />
-                                      <entry key="iconShape" value="NONE" />
+                                      <entry key="backgroundColor" value="004d40" />
+                                      <entry key="iconShape" value="CIRCLE" />
                                       <entry key="imageAsset" value="C:\Users\Guillermo\Desktop\ic_action_search-web.png" />
-                                      <entry key="outputName" value="ic_action_search" />
+                                      <entry key="outputName" value="ic_launcher_round" />
                                     </map>
                                   </option>
                                 </PersistentState>

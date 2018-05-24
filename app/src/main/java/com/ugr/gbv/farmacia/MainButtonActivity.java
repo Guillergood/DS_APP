@@ -102,7 +102,6 @@ public class MainButtonActivity extends RuntimePermission {
                 @Override
                 protected Void doInBackground(Void... voids) {
                     MedicationsSyncTask.syncMedications(context, xrp);
-
                     return null;
                 }
 
