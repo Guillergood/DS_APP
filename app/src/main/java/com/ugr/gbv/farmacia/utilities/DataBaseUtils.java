@@ -40,6 +40,22 @@ public class DataBaseUtils {
 
     }
 
+    public static Cursor getAllArticlesLexicographical(SQLiteDatabase mDb){
+
+        // Devuelve todos los articulos de la base de datos ordenados por el id
+
+        return mDb.query(MedicationContract.MedicationEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                MedicationContract.MedicationEntry.COLUMN_MED_NAME
+        );
+
+
+    }
+
 
     public static Cursor getAllArticlesMatch(String text, SQLiteDatabase mDb){
 

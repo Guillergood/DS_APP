@@ -280,7 +280,9 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Nu
                 int number = Integer.parseInt(text);
                 selectItem(adapterPosition, number);
                 notifyItemChanged(adapterPosition);
-                return true;
+
+
+                return !(selectedItems.size() < 1);
             }
             else{
                 return false;

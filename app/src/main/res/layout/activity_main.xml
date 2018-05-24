@@ -30,4 +30,13 @@
         android:layout_centerInParent="true"
         android:visibility="invisible" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/sort_floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/fast_scroller"
+        android:src="@mipmap/ic_sort"
+        android:layout_toLeftOf="@+id/fast_scroller" />
+
 </RelativeLayout>

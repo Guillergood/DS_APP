@@ -1,37 +1,79 @@
 <Medications>
     <med>
-        <name>Belgian Waffles</name>
-        <price>5.95</price>
+        <name>Ibuprofeno</name>
+        <price>5.00</price>
         <description>
-            Two of our famous Belgian Waffles with plenty of real maple syrup
+            Comprimidos de 500mg de ibuprofeno
         </description>
     </med>
     <med>
-        <name>Strawberry Belgian Waffles</name>
-        <price>7.95</price>
+        <name>Paracetamol</name>
+        <price>7.00</price>
         <description>
-            Light Belgian waffles covered with strawberries and whipped cream
+            Comprimidos de 500mg de ibuprofeno
         </description>
     </med>
     <med>
-        <name>Berry-Berry Belgian Waffles</name>
-        <price>8.95</price>
+        <name>Abrilar jarabe</name>
+        <price>8.00</price>
         <description>
-            Light Belgian waffles covered with an assortment of fresh berries and whipped cream
+            Abrilar jarabe 35ml
         </description>
     </med>
     <med>
-        <name>French Toast</name>
-        <price>4.50</price>
+        <name>Acarbosa tecnigen</name>
+        <price>4.00</price>
         <description>
-            Thick slices made from our homemade sourdough bread
+            Acarbosa tecnigen comprimidos 100 mg
         </description>
     </med>
     <med>
-        <name>Homestyle Breakfast</name>
-        <price>6.95</price>
+        <name>Keppra</name>
+        <price>10.00</price>
         <description>
-            Two eggs, bacon or sausage, toast, and our ever-popular hash browns
+            Keppra comprimidos 500 mg
+        </description>
+    </med>
+    <med>
+        <name>Aciclovir teva</name>
+        <price>10.00</price>
+        <description>
+            Aciclovir teva 50 mg/g crema efg
+        </description>
+    </med>
+    <med>
+        <name>Acovil</name>
+        <price>10.00</price>
+        <description>
+            Acovil 10 mg comprimidos
+        </description>
+    </med>
+    <med>
+        <name>Doloxital</name>
+        <price>10.00</price>
+        <description>
+            Doloxital 50 microgramos/hora parche transdermico efg
+        </description>
+    </med>
+    <med>
+        <name>Donepezilo flas sandoz</name>
+        <price>10.00</price>
+        <description>
+            Donepezilo flas sandoz 10 mg comprimidos bucodispersables efg
+        </description>
+    </med>
+    <med>
+        <name>Oftinal</name>
+        <price>10.00</price>
+        <description>
+            Oftinal comprimidos 500 mg
+        </description>
+    </med>
+    <med>
+        <name>Amoxicilina</name>
+        <price>10.00</price>
+        <description>
+            Amoxicilina comprimidos 500 mg
         </description>
     </med>
 </Medications>

@@ -7,6 +7,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity
 
     private boolean isNumberSearch = false;
     private boolean isSearching = false;
+    private boolean isSortedById = true;
 
 
 
@@ -68,6 +71,8 @@ public class MainActivity extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null)
             actionBar.setElevation(0f);
+
+
 
         //Asignar la vista al RecyclerView
         recyclerView = findViewById(R.id.rv_articles);
@@ -107,6 +112,24 @@ public class MainActivity extends AppCompatActivity
                 recyclerView.getContext(), layoutManager.getOrientation());
 
         recyclerView.addItemDecoration(dividerItemDecoration);
+
+        FloatingActionButton sort_floating_button = findViewById(R.id.sort_floating_button);
+        sort_floating_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Cursor cursor;
+                if(isSortedById) {
+                    cursor = DataBaseUtils.getAllArticlesLexicographical(mDb);
+                    isSortedById = false;
+                }
+                else {
+                    cursor = DataBaseUtils.getAllArticles(mDb);
+                    isSortedById = true;
+                }
+                medicationsAdapter.swapCursor(cursor);
+            }
+        });
+
 
         showLoading();
 

@@ -35,7 +35,7 @@
         android:layout_alignParentRight="true"
         android:background="@null"
         android:text="@string/next_button"
-        android:textColor="@color/colorBlack"/>
+        android:textColor="@color/colorWhite"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
         android:layout_alignParentLeft="true"
         android:background="@null"
         android:text="@string/skip_button"
-        android:textColor="@color/colorBlack"/>
+        android:textColor="@color/colorWhite"/>
 
 
 
