@@ -76,4 +76,53 @@
             Amoxicilina comprimidos 500 mg
         </description>
     </med>
+    <med>
+        <name>Salbutamol</name>
+        <price>10.00</price>
+        <description>
+            Salbutamol comprimidos 100 mg
+        </description>
+    </med>
+    <med>
+        <name>Aspirina</name>
+        <price>6.00</price>
+        <description>
+            Aspirina comprimidos 500 mg
+        </description>
+    </med>
+    <med>
+        <name>Furosemida</name>
+        <price>10.00</price>
+        <description>
+            Furosemida 40mg comprimidos efg
+        </description>
+    </med>
+    <med>
+        <name>Atorvastatina</name>
+        <price>16.00</price>
+        <description>
+            Atorvastatina Normon 20mg comprimidos
+        </description>
+    </med>
+    <med>
+        <name>Ramipril</name>
+        <price>5.50</price>
+        <description>
+            Ramipril Tecnigen 2.5mg comprimidos efg
+        </description>
+    </med>
+    <med>
+        <name>Lexotiroxina sódica</name>
+        <price>8.00</price>
+        <description>
+            Lexotiroxina sódica 50mg.
+        </description>
+    </med>
+    <med>
+        <name>Lansoprazol</name>
+        <price>7.00</price>
+        <description>
+            Para controlar ácidez del estómago. Lansoprazol Mabo 30mg Capsulas duras.
+        </description>
+    </med>
 </Medications>
